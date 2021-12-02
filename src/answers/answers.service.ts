@@ -1,54 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { response } from 'express';
 
 export type Answer = {
     id: number;
-    id_user: number;
-    date: Date;
-    score: number;
-    number_question: number;
-    category: number;
+    id_user: string;
+    date: number;
+    score: string;
+    number_question: string;
+    category: string;
     difficulty: string;
 };
 
 @Injectable()
 export class AnswerService {
-    private readonly answers: Answer[] = [
-        {
-            id: 1,
-            id_user: 1,
-            date: new Date('2021-10-10T03:24:00'),
-            score: 5,
-            number_question: 10,
-            category: 22,
-            difficulty: 'easy'
-        },
-        {
-            id: 2,
-            id_user: 1,
-            date: new Date('2021-11-10T03:24:00'),
-            score: 24,
-            number_question: 25,
-            category: 21,
-            difficulty: 'medium'
-        },
-        {
-            id: 3,
-            id_user: 2,
-            date: new Date('2021-11-12T03:24:00'),
-            score: 5,
-            number_question: 10,
-            category: 22,
-            difficulty: 'easy'
-        },
-    ];
+    private readonly answers: Answer[] = [];
 
-    async findAll(id_user: number){
+    async findAll(id_user: string){
         let answersTable = [];
         for (var i=0; i<this.answers.length;i++){
+            console.log(this.answers[i])
             if(this.answers[i].id_user == id_user){
                 answersTable.push((this.answers[i]));
             }
         }
         return answersTable;
+    }
+
+    async create(id_user: string, score: string, number_question: string, category: string, difficulty: string){
+
+        let answer = {
+            id: Date.now(),
+            id_user: id_user,
+            date: Date.now(),
+            score: score,
+            number_question: number_question,
+            category: category,
+            difficulty: difficulty
+        }
+        
+        this.answers.push(answer)
+        console.log(this.answers)
+        return response.status(200) 
     }
 }
